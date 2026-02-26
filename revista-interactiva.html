@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revista Viva - Edición Interactiva</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: rgba(15, 23, 42, 0.75);
+      --text: #e2e8f0;
+      --accent: #22d3ee;
+      --accent-2: #f472b6;
+      --accent-3: #facc15;
+      --ok: #4ade80;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 0%, #1d4ed8 0%, transparent 35%),
+                  radial-gradient(circle at 80% 10%, #be185d 0%, transparent 30%),
+                  var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: float 12s linear infinite;
+      opacity: 0.35;
+      filter: blur(0.5px);
+    }
+
+    @keyframes float {
+      from { transform: translateY(110vh) scale(0.8); }
+      to { transform: translateY(-20vh) scale(1.2); }
+    }
+
+    header {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 4rem 1.2rem 2.5rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      animation: pulseTitle 4s infinite ease-in-out;
+    }
+
+    @keyframes pulseTitle {
+      0%, 100% { text-shadow: 0 0 0 transparent; }
+      50% { text-shadow: 0 0 24px rgba(34, 211, 238, 0.45); }
+    }
+
+    header p {
+      margin: 0.75rem auto 0;
+      max-width: 700px;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      width: min(1100px, 92vw);
+      margin: 0 auto 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.3rem;
+    }
+
+    .card {
+      position: relative;
+      background: linear-gradient(160deg, rgba(30, 41, 59, 0.85), var(--card));
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform 250ms ease, border-color 250ms ease;
+      transform-style: preserve-3d;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(34, 211, 238, 0.5);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -80% -40%;
+      background: conic-gradient(from 180deg, transparent, rgba(34, 211, 238, 0.18), transparent 40%);
+      animation: spin 7s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(1turn); }
+    }
+
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 0.3rem 0.7rem;
+      margin-bottom: 0.75rem;
+      background: rgba(34, 211, 238, 0.2);
+      border: 1px solid rgba(34, 211, 238, 0.45);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0;
+      line-height: 1.45;
+      opacity: 0.95;
+    }
+
+    .gallery {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .cover {
+      height: 220px;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 350ms ease;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      box-shadow: var(--shadow);
+    }
+
+    .cover:hover {
+      transform: rotateY(9deg) rotateX(6deg) scale(1.02);
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 45%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .cover .title {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 0.85rem;
+      backdrop-filter: blur(6px);
+      background: rgba(2, 6, 23, 0.6);
+      font-weight: 600;
+    }
+
+    .progress-wrap {
+      grid-column: 1 / -1;
+      margin-top: 0.6rem;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .bar {
+      height: 12px;
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.6rem;
+    }
+
+    .bar > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      transition: width 650ms cubic-bezier(.31,1.11,.53,.98);
+    }
+
+    button {
+      margin-top: 0.8rem;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.62rem 1rem;
+      color: #03111d;
+      background: linear-gradient(120deg, var(--accent), #67e8f9);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease;
+    }
+
+    button:active { transform: scale(0.96); }
+
+    .read-ok {
+      color: var(--ok);
+      margin-left: 0.5rem;
+      opacity: 0;
+      transition: opacity 300ms ease;
+    }
+
+    .read-ok.visible {
+      opacity: 1;
+    }
+
+    @media (max-width: 640px) {
+      header { padding-top: 3rem; }
+      .cover { height: 180px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Revista Viva</h1>
+    <p>
+      Explora una edición digital con animaciones interactivas: tarjetas con efecto 3D,
+      portadas dinámicas y una barra de progreso para seguir tu lectura.
+    </p>
+  </header>
+
+  <main>
+    <article class="card" data-tilt>
+      <span class="tag">Entrevista</span>
+      <h2>Artistas emergentes 2026</h2>
+      <p>Descubre voces nuevas del diseño latinoamericano y su visión sobre el futuro creativo.</p>
+    </article>
+
+    <article class="card" data-tilt>
+      <span class="tag">Tecnología</span>
+      <h2>IA en redacciones modernas</h2>
+      <p>Cómo la automatización inteligente mejora la investigación y la narrativa editorial.</p>
+    </article>
+
+    <article class="card" data-tilt>
+      <span class="tag">Cultura</span>
+      <h2>Guía de festivales urbanos</h2>
+      <p>Agenda interactiva para no perderte los eventos culturales más influyentes del año.</p>
+    </article>
+
+    <section class="gallery" aria-label="Portadas destacadas">
+      <div class="cover" style="background: linear-gradient(160deg, #7c3aed, #22d3ee);"><div class="title">Moda sostenible</div></div>
+      <div class="cover" style="background: linear-gradient(160deg, #be123c, #f97316);"><div class="title">Gastronomía local</div></div>
+      <div class="cover" style="background: linear-gradient(160deg, #0f766e, #84cc16);"><div class="title">Arquitectura verde</div></div>
+      <div class="cover" style="background: linear-gradient(160deg, #1d4ed8, #ec4899);"><div class="title">Viajes inmersivos</div></div>
+    </section>
+
+    <section class="progress-wrap">
+      <strong>Progreso de lectura</strong>
+      <p id="progressText">Has revisado 0 de 8 secciones.</p>
+      <div class="bar"><span id="progressBar"></span></div>
+      <button id="advanceBtn" type="button">Marcar sección como leída</button>
+      <span class="read-ok" id="readOk">¡Excelente ritmo!</span>
+    </section>
+  </main>
+
+  <script>
+    const particles = 28;
+    for (let i = 0; i < particles; i += 1) {
+      const dot = document.createElement('span');
+      dot.className = 'particle';
+      const size = Math.random() * 8 + 4;
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+      dot.style.left = `${Math.random() * 100}vw`;
+      dot.style.animationDuration = `${Math.random() * 8 + 9}s`;
+      dot.style.animationDelay = `${Math.random() * 8}s`;
+      dot.style.background = i % 3 === 0 ? 'rgba(34, 211, 238, .9)' : (i % 3 === 1 ? 'rgba(244, 114, 182, .8)' : 'rgba(250, 204, 21, .75)');
+      document.body.appendChild(dot);
+    }
+
+    document.querySelectorAll('[data-tilt]').forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const rotateY = ((x / rect.width) - 0.5) * 16;
+        const rotateX = ((y / rect.height) - 0.5) * -14;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    const totalSections = 8;
+    let readSections = 0;
+
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const readOk = document.getElementById('readOk');
+
+    document.getElementById('advanceBtn').addEventListener('click', () => {
+      if (readSections < totalSections) {
+        readSections += 1;
+      }
+
+      const progress = Math.round((readSections / totalSections) * 100);
+      progressBar.style.width = `${progress}%`;
+      progressText.textContent = `Has revisado ${readSections} de ${totalSections} secciones.`;
+
+      if (progress >= 50) {
+        readOk.classList.add('visible');
+      }
+
+      if (progress === 100) {
+        readOk.textContent = '¡Edición completada!';
+      }
+    });
+  </script>
+</body>
+</html>
